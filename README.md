@@ -13,6 +13,7 @@ I know, I know...TL;DR.
 
 This fork of the Django REST Framework HMAC library is modified from the [original](https://github.com/aaronlelevier/django-rest-framework-hmac).
 In particular, I had some difficulties with with original.  The following changes were made:
+
 -The original version looked for a few headers in the client request, 'Signature', 'Timestamp', etc..  However, Django translates those header names
 to 'HTTP_SIGNATURE' and 'HTTP_TIMESTAMP', etc., so this library didn't seem to work (although the example project, which spoofs a request, did work).
 I changed the library to look for headers with the names that Django alters them to.
