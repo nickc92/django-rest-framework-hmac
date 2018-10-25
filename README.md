@@ -14,13 +14,13 @@ I know, I know...TL;DR.
 This fork of the Django REST Framework HMAC library is modified from the [original](https://github.com/aaronlelevier/django-rest-framework-hmac).
 In particular, I had some difficulties with with original.  The following changes were made:
 
--The original version looked for a few headers in the client request, 'Signature', 'Timestamp', etc..  However, Django translates those header names
+- The original version looked for a few headers in the client request, 'Signature', 'Timestamp', etc..  However, Django translates those header names
 to 'HTTP_SIGNATURE' and 'HTTP_TIMESTAMP', etc., so this library didn't seem to work (although the example project, which spoofs a request, did work).
 I changed the library to look for headers with the names that Django alters them to.
--The original version used a string timestamp as a "nonce." However, it didn't seem like the authentication was actually checking that the incoming
+- The original version used a string timestamp as a "nonce." However, it didn't seem like the authentication was actually checking that the incoming
 timestamp was greater than the previous one (or even saving the previous one).  I changed the timestamp to an integer nonce, and this nonce must
 increase with every new client request (the usual recommendation is to use the current POSIX timestamp in milliseconds as the nonce).
--HMAC authentication requires the client to create a signature that is unique to his request.  The actual request itself (usually a JSON string) gets
+- HMAC authentication requires the client to create a signature that is unique to his request.  The actual request itself (usually a JSON string) gets
 digested as part of this.  In order to check that this signature is correct, the server must construct the signature from the exact same pieces that the
 client used, and compare signatures.  The original version of the library received the client's request, but already parsed into a JSON object
 (by Django); the library then dumps this JSON object to a string in order to calculate the request signature.  But imagine that the request JSON was
