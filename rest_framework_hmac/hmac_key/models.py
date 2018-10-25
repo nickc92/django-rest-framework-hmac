@@ -25,6 +25,7 @@ class HMACKey(models.Model):
         settings.AUTH_USER_MODEL, related_name='hmac_key',
         on_delete=models.CASCADE, verbose_name=_("User")
     )
+    nonce = models.IntegerField(default=1)
     created = models.DateTimeField(_("Created"), auto_now_add=True)
 
     class Meta:

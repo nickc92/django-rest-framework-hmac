@@ -19,6 +19,7 @@ class Migration(migrations.Migration):
                 ('key', models.CharField(default=HMACKey.generate_key, max_length=40, primary_key=True, serialize=False)),
                 ('secret', models.CharField(default=HMACKey.generate_key, max_length=40)),
                 ('created', models.DateTimeField(auto_now_add=True, verbose_name='Created')),
+                ('nonce', models.IntegerField(default=1)),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),

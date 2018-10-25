@@ -3,6 +3,12 @@ import hashlib
 import hmac
 import json
 
+def get_request_field(request, field):
+    val = None
+    if val is None and field in request.META: val = request.META[field]
+    field2 = 'HTTP_' + field.upper()
+    if val is None and field2 in request.META: val = request.META[field2]
+    return val
 
 class BaseHMAC(object):
     """
@@ -53,15 +59,15 @@ class HMACAuthenticator(BaseHMAC):
         """
         headers = {
             'method': request.method,
-            'hostname': request.META['REMOTE_ADDR'],
-            'path': request.META['PATH_INFO'],
-            'timestamp': request.META['Timestamp']
+            'hostname': get_request_field(request, 'REMOTE_ADDR'),
+            'path': get_request_field(request, 'PATH_INFO'),
+            'nonce': get_request_field(request, 'Nonce')
         }
-        s = '{method}\n{hostname}\n{path}\n{timestamp}\n'.format(**headers)
+        s = '{method}\n{hostname}\n{path}\n{nonce}\n'.format(**headers)
 
         # Don't add in case of a 'GET' request
         if getattr(request, 'data', None):
-            s += json.dumps(request.data, separators=(',', ':'))
+            s += json.dumps(request.data, separators=(',', ':'), sort_keys=True)
 
         return s
 
@@ -85,7 +91,7 @@ class HMACSigner(BaseHMAC):
         Calcuates the string to sign using the HMAC secret
 
         """
-        s = '{method}\n{hostname}\n{path}\n{timestamp}\n'.format(**headers)
+        s = '{method}\n{hostname}\n{path}\n{nonce}\n'.format(**headers)
 
         # Don't add in case of a 'GET' request
         if data:
