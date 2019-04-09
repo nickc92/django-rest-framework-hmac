@@ -7,7 +7,6 @@ from rest_framework_hmac.client import HMACAuthenticator, get_request_field
 class HMACAuthentication(BaseAuthentication):
 
     def authenticate(self, request):
-
         signature = self.get_signature(request)
         user = self.get_user(request)
         nonce = self.get_nonce(request)
@@ -16,7 +15,7 @@ class HMACAuthentication(BaseAuthentication):
 
         if not hmac.compare_digest(b64, signature):
             raise AuthenticationFailed()
-        
+
         if nonce <= user.hmac_key.nonce:
             raise Exception('Supplied nonce is unacceptable!')
 

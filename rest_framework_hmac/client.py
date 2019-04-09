@@ -51,7 +51,8 @@ class HMACAuthenticator(BaseHMAC):
         Calculates the HMAC Signature based upon the headers and data
         """
         string_to_sign = self.string_to_sign(request)
-        return self._calc_signature_from_str(string_to_sign)
+        signature = self._calc_signature_from_str(string_to_sign)
+        return signature
 
     def string_to_sign(self, request):
         """
@@ -95,6 +96,6 @@ class HMACSigner(BaseHMAC):
 
         # Don't add in case of a 'GET' request
         if data:
-            s += json.dumps(data, separators=(',', ':'))
+            s += json.dumps(data, separators=(',', ':'), sort_keys=True)
 
         return s
